@@ -5,7 +5,7 @@ import com.sexyguys.suhang.domain.User;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
-public class JPAUserRepository implements UserRepository{
+public class JPAUserRepository implements UserRepository {
     private final EntityManager entityManager;
 
     public JPAUserRepository(EntityManager em) {
