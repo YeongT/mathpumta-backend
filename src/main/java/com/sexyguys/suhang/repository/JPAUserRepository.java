@@ -3,7 +3,6 @@ package com.sexyguys.suhang.repository;
 import com.sexyguys.suhang.domain.User;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class JPAUserRepository implements UserRepository{
@@ -14,9 +13,8 @@ public class JPAUserRepository implements UserRepository{
     }
 
     @Override
-    public User register(User user) {
+    public void register(User user) {
         entityManager.persist(user);
-        return user;
     }
 
     @Override
