@@ -6,34 +6,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import javax.sql.DataSource;
 
 @Configuration
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:config/database.properties")
 class DataSourceConfigure {
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
-    @Value("${databaseUrl}")
+    @Value("${database.host:}")
     private String databaseUrl;
 
-    @Value("${databaseUser}")
+    @Value("${database.user:}")
     private String databaseUser;
 
-    @Value("${databasePassword}")
+    @Value("${database.password:}")
     private String databasePassword;
 
     @Bean
     @Primary
     public DataSource getDataSource() {
-        if (databaseUrl.isEmpty()) databaseUrl = System.getenv("DB_HOST_URL");
-        if (databaseUser.isEmpty()) databaseUrl = System.getenv("DB_USER_ID");
-        if (databasePassword.isEmpty()) databaseUrl = System.getenv("DB_USER_PW");
-
+        if (databaseUrl.isBlank()) databaseUrl = System.getenv("DB_HOST");
+        if (databaseUser.isBlank()) databaseUser = System.getenv("DB_USER_ID");
+        if (databasePassword.isBlank()) databasePassword = System.getenv("DB_USER_PW");
         return DataSourceBuilder
                 .create()
                 .url(databaseUrl)

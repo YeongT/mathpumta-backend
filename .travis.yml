@@ -2,8 +2,6 @@ language: java
 jdk:
   - openjdk15
 
-sudo: enabled
-
 branches:
   only:
     - master
@@ -18,13 +16,6 @@ script: "./gradlew clean build"
 
 before_install:
   - chmod +x gradlew
-
-# Deploy to Heroku
-deploy:
-  provider: heroku
-  api_key:
-    secure: $HEROKU_API_KEY
-  app: sexyguys-appllication
 
 # CI 실행 완료시 메일로 알람
 notifications:

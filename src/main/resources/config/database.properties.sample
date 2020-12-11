@@ -1,5 +1,5 @@
-databaseUrl=
-databaseUser=
-databasePassword=
+database.host=
+database.user=
+database.password=
 
-userBasicAuth=
+auth.user.basic=
