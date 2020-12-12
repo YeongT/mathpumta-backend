@@ -1,0 +1,3 @@
+# 응용프로그래밍-개발-수행평가 [![Build Status](https://travis-ci.com/YunYeongChang/application-programming-suhang.svg?branch=master)](https://travis-ci.com/YunYeongChang/application-programming-suhang)
+- 교과목 응용프로그래밍개발 수행평가의 CI/CD를 위한 Git Repository 입니다.
+- [Mathpumta](https://www.dimigo.codes)가 본 API를 사용합니다. [Mathpumta Git](https://github.com/YunYeongChang/mathpumta), [Mathpumta Preview](https://math.dimigo.codes)
