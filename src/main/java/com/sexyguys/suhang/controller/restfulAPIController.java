@@ -5,8 +5,10 @@ import com.sexyguys.suhang.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 @Controller
 public class restfulAPIController {
@@ -17,9 +19,26 @@ public class restfulAPIController {
         this.userService = userService;
     }
 
-    @GetMapping("/api/account/new")
-    public String NotAuthorized() {
-        return "notAuthorized";
+    public static String generateString(int length) {
+        Random rand = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int index = rand.nextInt(3);
+            switch (index) {
+                case 0 -> sb.append((char) (rand.nextInt(26) + 97));
+                case 1 -> sb.append((char) (rand.nextInt(26) + 65));
+                case 2 -> sb.append(rand.nextInt(10));
+            }
+        }
+        return sb.toString();
+    }
+
+    @PostMapping("/api/mvc/account/new")
+    public String RegisterUser(User user, Model model) {
+        User result = userService.register(user);
+
+        //TODO: PLANTSTOEN - IMPLEMENT VIEW PAGE
+        return "page";
     }
 
     @GetMapping("/api/account/list")
@@ -28,5 +47,4 @@ public class restfulAPIController {
         model.addAttribute(LIST_USER, userArrayList);
         return LIST_USER;
     }
-
 }
