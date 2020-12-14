@@ -1,12 +1,11 @@
 package com.sexyguys.suhang.repository;
 
 import com.sexyguys.suhang.domain.Article;
-import com.sexyguys.suhang.domain.User;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
-public class JPAArticleRepository implements ArticleRepository{
+public class JPAArticleRepository implements ArticleRepository {
     private final EntityManager entityManager;
 
     public JPAArticleRepository(EntityManager em) {
@@ -25,7 +24,7 @@ public class JPAArticleRepository implements ArticleRepository{
 
     @Override
     public ArrayList<Article> findByEmail(String email) {
-        return (ArrayList<Article>) entityManager.createQuery("select article from Article article where article.email = :email", Article.class).getResultList();
+        return (ArrayList<Article>) entityManager.createQuery("select article from Article article where article.email = :email", Article.class).setParameter("email", email).getResultList();
     }
 
     @Override

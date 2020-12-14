@@ -1,6 +1,7 @@
 package com.sexyguys.suhang.repository;
 
 import com.sexyguys.suhang.domain.User;
+
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public class JPAUserRepository implements UserRepository {
 
     @Override
     public User findByEmail(String email) {
-        ArrayList<User> users = (ArrayList<User>) entityManager.createQuery("select user from User user where user.email = :email", User.class).getResultList();
+        ArrayList<User> users = (ArrayList<User>) entityManager.createQuery("select user from User as user where user.email = :email", User.class).setParameter("email", email).getResultList();
         return users.isEmpty() ? null : users.get(0);
     }
 
