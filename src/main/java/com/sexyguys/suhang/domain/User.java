@@ -14,6 +14,12 @@ public class User {
     String school;
     String salt;
 
+    public void initialize(String email, String password, String school) {
+        this.email = email;
+        this.password = password;
+        this.school = school;
+    }
+
     public int getId() {
         return id;
     }

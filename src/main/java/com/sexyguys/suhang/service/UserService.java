@@ -16,9 +16,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public int register(User user) {
+    public User register(User user) {
         userRepository.register(user);
-        return user.getId();
+        return findOneMember(user.getId());
     }
 
     public ArrayList<User> loadUsers() {
