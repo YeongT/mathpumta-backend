@@ -1,21 +1,15 @@
 package com.sexyguys.suhang.controller.account;
 
+import com.sexyguys.suhang.controller.AuthController;
 import com.sexyguys.suhang.domain.User;
 import com.sexyguys.suhang.domain.models.APIResult;
 import com.sexyguys.suhang.service.UserService;
-import lombok.SneakyThrows;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.util.Arrays;
-import java.util.Base64;
-
-import static com.sexyguys.suhang.controller.restfulAPIController.generateString;
+import static com.sexyguys.suhang.controller.AuthController.encryptPassword;
+import static com.sexyguys.suhang.controller.AuthController.generateString;
 
 @RestController
 public class registerUser {
@@ -30,7 +24,7 @@ public class registerUser {
     @PostMapping(value = "/api/account/new")
     @ResponseBody
     public APIResult getPost(@RequestHeader String Authorization, @ModelAttribute User params) {
-        APIResult registerResult = new APIResult(500, "ERROR: Unknown Error Occurred", null, null);
+        APIResult registerResult = new APIResult();
         if (!Authorization.equals(userBasicAuth.isBlank() ? Environment.getProperties().getProperty("AUTH_USER_BASIC", "Basic userAuthKeyBase64Encoded") : userBasicAuth)) {
             registerResult.statusCode = 403;
             registerResult.bodyMsg = "ERROR : Not Authorized";
@@ -56,12 +50,5 @@ public class registerUser {
         return registerResult;
     }
 
-    @SneakyThrows
-    public String encryptPassword(String password, String salt) {
-        MessageDigest encoder = MessageDigest.getInstance("SHA-512");
-        encoder.update(salt.getBytes());
-        encoder.update(password.getBytes());
-        return Base64.getEncoder().encodeToString(encoder.digest());
-    }
 
 }
