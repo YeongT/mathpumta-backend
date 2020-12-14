@@ -1,7 +1,6 @@
 package com.sexyguys.suhang.repository;
 
 import com.sexyguys.suhang.domain.User;
-
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
