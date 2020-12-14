@@ -31,14 +31,21 @@ public class registerUser {
             return registerResult;
         }
 
-        if (!params.getEmail().isEmpty() || params.getPassword().isEmpty() || params.getSchool().isEmpty()) {
+        if (params.getEmail().isEmpty() || params.getPassword().isEmpty() || params.getSchool().isEmpty()) {
             registerResult.statusCode = 412;
             registerResult.bodyMsg = "ERROR : INVALID POST DATA";
+            return registerResult;
+        }
+        User result = userService.findOneMember(params.getEmail());
+        if (result != null) {
+            registerResult.statusCode = 409;
+            registerResult.bodyMsg = "ERROR : DUPLICATE EMAIL";
+            return registerResult;
         }
         params.setSalt(generateString((int) (Math.random() % 3 + 10)));
         params.setPassword(encryptPassword(params.getPassword(),params.getSalt()));
 
-        User result = userService.register(params);
+        result = userService.register(params);
         if (result == null) {
             registerResult.statusCode = 500;
             registerResult.bodyMsg = "ERROR : failed to save user on Database.";

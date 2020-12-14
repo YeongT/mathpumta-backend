@@ -20,7 +20,7 @@ public class loginUser {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/api/account/new")
+    @PostMapping(value = "/api/account/login")
     @ResponseBody
     public APIResult getPost(@RequestHeader String Authorization, @ModelAttribute User params) {
         APIResult loginResult = new APIResult();
@@ -30,23 +30,26 @@ public class loginUser {
             return loginResult;
         }
 
-        if (!params.getEmail().isEmpty() || params.getPassword().isEmpty()) {
+        if (params.getEmail().isEmpty() || params.getPassword().isEmpty()) {
             loginResult.statusCode = 412;
             loginResult.bodyMsg = "ERROR : INVALID POST DATA";
+            return loginResult;
         }
 
         User target = userService.findOneMember(params.getEmail());
         if (target == null) {
             loginResult.statusCode = 409;
             loginResult.bodyMsg = "ERROR : INVALID ID/PW";
+            return loginResult;
         }
 
         if (!target.getPassword().equals(encryptPassword(params.getPassword(),target.getSalt()))) {
             loginResult.statusCode = 409;
             loginResult.bodyMsg = "ERROR : INVALID ID/PW";
+            return loginResult;
         }
         loginResult.statusCode = 200;
-        loginResult.bodyMsg = "SUCCEED : logined";
+        loginResult.bodyMsg = "SUCCEED : user logined";
         loginResult.output = target;
         return loginResult;
     }
