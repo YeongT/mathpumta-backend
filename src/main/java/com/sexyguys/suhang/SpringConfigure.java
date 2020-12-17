@@ -13,10 +13,8 @@ import javax.sql.DataSource;
 public class SpringConfigure {
 
     private final EntityManager entityManager;
-    private final DataSource dataSource;
 
     public SpringConfigure(DataSource dataSource, EntityManager entityManager) {
-        this.dataSource = dataSource;
         this.entityManager = entityManager;
     }
 

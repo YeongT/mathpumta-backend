@@ -21,6 +21,7 @@ public class UserService {
         return findOneMember(user.getId());
     }
 
+
     public ArrayList<User> loadUsers() {
         return userRepository.findAll();
     }
