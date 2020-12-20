@@ -15,15 +15,12 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Base64;
 
-import static com.sexyguys.suhang.utility.StringUtility.generateString;
-
 @Controller
 public class AuthController {
     private static final String ACCOUNT_LIST = "account-list";
     private static final String ACCOUNT_REGISTER = "account-register";
     private static final String ACCOUNT_MODIFY = "account-modify";
     private static final String ACCOUNT_DELETE = "account-delete";
-
 
     private final UserService userService;
 
@@ -38,11 +35,9 @@ public class AuthController {
     }
 
     @PostMapping("/account/register.do")
-    public String postAccountRegister(RegisterVO registerVO, Model model) {
+    public String postAccountRegister(RegisterVO registerVO) {
         User user = new User();
-        user.initialize(registerVO.getEmail(), null, registerVO.getSchool());
-        user.setSalt(generateString((int) (Math.random() % 3 + 10)));
-        user.setPassword(encryptPassword(registerVO.getPassword(), user.getSalt()));
+        user.initialize(registerVO.getEmail(), registerVO.getPassword(), registerVO.getSchool());
         userService.register(user);
         return "redirect:/account/list";
     }
@@ -62,8 +57,11 @@ public class AuthController {
     }
 
     @PostMapping("/account/modify.do")
-    public String postAccountModify(ModifyAccountVO modifyAccountVO, Model model) {
-        // TODO - 회원 수정 로직 구현
+    public String postAccountModify(ModifyAccountVO modifyAccountVO) {
+        User previous = new User(), target = new User();
+        previous.initialize(modifyAccountVO.getTarget_email(), modifyAccountVO.getTarget_password(), "");
+        target.initialize(modifyAccountVO.getNew_email(), modifyAccountVO.getNew_password(), modifyAccountVO.getNew_school());
+        userService.updateMember(previous, target);
         return "redirect:/account/list";
     }
 
@@ -75,8 +73,11 @@ public class AuthController {
     }
 
     @PostMapping("/account/delete.do")
-    public String postAccountDelete(DeleteAccountVO deleteAccountVO, Model model) {
-        // TODO - 회원 삭제 로직 구현
+    public String postAccountDelete(DeleteAccountVO deleteAccountVO) {
+        User target = new User();
+        target.setEmail(deleteAccountVO.getEmail());
+        target.setPassword(deleteAccountVO.getPassword());
+        userService.deleteMember(target);
         return "redirect:/account/list";
     }
 
