@@ -1,6 +1,10 @@
 package com.sexyguys.suhang.controller;
 
 import com.sexyguys.suhang.domain.User;
+import com.sexyguys.suhang.domain.vo.DeleteAccountVO;
+import com.sexyguys.suhang.domain.vo.LoginVO;
+import com.sexyguys.suhang.domain.vo.ModifyAccountVO;
+import com.sexyguys.suhang.domain.vo.RegisterVO;
 import com.sexyguys.suhang.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
@@ -15,7 +19,12 @@ import java.util.Random;
 
 @Controller
 public class AuthController {
-    private static final String LIST_USER = "userList";
+    private static final String ACCOUNT_LIST = "account-list";
+    private static final String ACCOUNT_REGISTER = "account-register";
+    private static final String ACCOUNT_MODIFY = "account-modify";
+    private static final String ACCOUNT_DELETE = "account-delete";
+
+
     private final UserService userService;
 
     public AuthController(UserService userService) {
@@ -36,19 +45,54 @@ public class AuthController {
         return sb.toString();
     }
 
-    @PostMapping("/api/mvc/account/new")
-    public String RegisterUser(User user, Model model) {
-        User result = userService.register(user);
 
-        //TODO: PLANTSTOEN - IMPLEMENT VIEW PAGE
-        return "page";
+    @GetMapping("/account/register")
+    public String getAccountNew(Model model) {
+        model.addAttribute("registerVO", new RegisterVO());
+        return ACCOUNT_REGISTER;
     }
 
-    @GetMapping("/api/account/list")
-    public String ListUser(Model model) {
+    @PostMapping("/account/register.do")
+    public String postAccountRegister(RegisterVO registerVO, Model model) {
+        User user = new User();
+        user.initialize(registerVO.getEmail(), null, registerVO.getSchool());
+        user.setSalt(generateString((int) (Math.random() % 3 + 10)));
+        user.setPassword(encryptPassword(registerVO.getPassword(), user.getSalt()));
+        userService.register(user);
+        return "redirect:/account/list";
+    }
+
+
+    @GetMapping("/account/list")
+    public String getAccountList(Model model) {
         ArrayList<User> userArrayList = userService.loadUsers();
-        model.addAttribute(LIST_USER, userArrayList);
-        return LIST_USER;
+        model.addAttribute("UserList", userArrayList);
+        return ACCOUNT_LIST;
+    }
+
+    @GetMapping("/account/modify")
+    public String getAccountModify(Model model) {
+        model.addAttribute("modifyAccountVO", new ModifyAccountVO());
+        return ACCOUNT_MODIFY;
+    }
+
+    @PostMapping("/account/modify.do")
+    public String postAccountModify(ModifyAccountVO modifyAccountVO, Model model) {
+        // TODO - 회원 수정 로직 구현
+        return "redirect:/account/list";
+    }
+
+
+    @GetMapping("/account/delete")
+    public String getAccountDelete(Model model) {
+        model.addAttribute("deleteAccountVO", new DeleteAccountVO());
+        return ACCOUNT_DELETE;
+    }
+
+    @PostMapping("/account/delete.do")
+    public String postAccountDelete(DeleteAccountVO deleteAccountVO, Model model) {
+        // TODO - 회원 삭제 로직 구현
+        return "redirect:/account/list";
     }
 
     @SneakyThrows

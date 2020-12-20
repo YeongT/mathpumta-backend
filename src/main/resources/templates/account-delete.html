@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>학생 삭제</title>
+</head>
+<body>
+<form method="post" th:action="@{/account/delete.do}" th:object="${deleteAccountVO}">
+    <input type="text" placeholder="삭제할 학생의 이메일을 입력해주세요" th:field="*{email}">
+    <input type="password" placeholder="해당 학생의 비밀번호를 입력해주세요" th:field="*{password}">
+    <button type="submit">삭제하기</button>
+</form>
+</body>
+</html>

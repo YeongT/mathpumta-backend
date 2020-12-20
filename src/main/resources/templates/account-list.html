@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>userList</title>
+    <title>학생 목록</title>
 </head>
 <body>
 <table>
@@ -16,7 +16,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${userList}">
+    <tr th:each="user : ${UserList}">
         <td th:text="${user.getId()}"></td>
         <td th:text="${user.getEmail()}"></td>
         <td th:text="${user.getPassword()}"></td>

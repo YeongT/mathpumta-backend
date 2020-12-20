@@ -26,6 +26,7 @@ public class SpringConfigure {
         return new UserService(userRepository());
     }
 
+
     @Bean
     public ArticleService articleService() {
         return new ArticleService(articleRepository());
