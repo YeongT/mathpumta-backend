@@ -13,6 +13,7 @@ public class JPAUserRepository implements UserRepository {
         this.entityManager = em;
     }
 
+    //유저 객체를 데이터베이스에 저장하는 함수.
     @Override
     @Modifying
     public void save(User user) {

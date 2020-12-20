@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManager;
-import javax.sql.DataSource;
 
+//DI Injection 구현을 위해 Bean과 Autowired를 조합해 필요할때 의존성이 주입되도록 함.
 @Configuration
 public class SpringConfigure {
 
     private final EntityManager entityManager;
 
-    public SpringConfigure(DataSource dataSource, EntityManager entityManager) {
+    public SpringConfigure(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

@@ -28,18 +28,20 @@ public class AuthController {
         this.userService = userService;
     }
 
+    //SHA512방식으로 Base64 해시 해주는 함수 입니다.
+    @SneakyThrows
+    public static String encryptPassword(String password, String salt) {
+        MessageDigest encoder = MessageDigest.getInstance("SHA-512");
+        encoder.update(salt.getBytes());
+        encoder.update(password.getBytes());
+        return Base64.getEncoder().encodeToString(encoder.digest());
+    }
+
+    //Get으로 요청을 받으면 MVC로 폼을 띄운뒤
     @GetMapping("/account/register")
     public String getAccountNew(Model model) {
         model.addAttribute("registerVO", new RegisterVO());
         return ACCOUNT_REGISTER;
-    }
-
-    @PostMapping("/account/register.do")
-    public String postAccountRegister(RegisterVO registerVO) {
-        User user = new User();
-        user.initialize(registerVO.getEmail(), registerVO.getPassword(), registerVO.getSchool());
-        userService.register(user);
-        return "redirect:/account/list";
     }
 
 
@@ -56,12 +58,12 @@ public class AuthController {
         return ACCOUNT_MODIFY;
     }
 
-    @PostMapping("/account/modify.do")
-    public String postAccountModify(ModifyAccountVO modifyAccountVO) {
-        User previous = new User(), target = new User();
-        previous.initialize(modifyAccountVO.getTarget_email(), modifyAccountVO.getTarget_password(), "");
-        target.initialize(modifyAccountVO.getNew_email(), modifyAccountVO.getNew_password(), modifyAccountVO.getNew_school());
-        userService.updateMember(previous, target);
+    //Post로 리다이렉트하여서 UserService의 함수를 통해 실행한후 조회 페이지로 이동시킨다.
+    @PostMapping("/account/register.do")
+    public String postAccountRegister(RegisterVO registerVO) {
+        User user = new User();
+        user.initialize(registerVO.getEmail(), registerVO.getPassword(), registerVO.getSchool());
+        userService.register(user);
         return "redirect:/account/list";
     }
 
@@ -81,11 +83,13 @@ public class AuthController {
         return "redirect:/account/list";
     }
 
-    @SneakyThrows
-    public static String encryptPassword(String password, String salt) {
-        MessageDigest encoder = MessageDigest.getInstance("SHA-512");
-        encoder.update(salt.getBytes());
-        encoder.update(password.getBytes());
-        return Base64.getEncoder().encodeToString(encoder.digest());
+    //수정 페이지는 이전 객체, 새로운 객체로 두개를 넘겨서 이전의 객체를 덮어써 새로 저장하는 방식으로 구현하였다.
+    @PostMapping("/account/modify.do")
+    public String postAccountModify(ModifyAccountVO modifyAccountVO) {
+        User previous = new User(), target = new User();
+        previous.initialize(modifyAccountVO.getTarget_email(), modifyAccountVO.getTarget_password(), "");
+        target.initialize(modifyAccountVO.getNew_email(), modifyAccountVO.getNew_password(), modifyAccountVO.getNew_school());
+        userService.updateMember(previous, target);
+        return "redirect:/account/list";
     }
 }
