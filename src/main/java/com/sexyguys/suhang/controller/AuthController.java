@@ -1,12 +1,10 @@
 package com.sexyguys.suhang.controller;
 
 import com.sexyguys.suhang.domain.User;
-import com.sexyguys.suhang.domain.vo.DeleteAccountVO;
-import com.sexyguys.suhang.domain.vo.LoginVO;
-import com.sexyguys.suhang.domain.vo.ModifyAccountVO;
-import com.sexyguys.suhang.domain.vo.RegisterVO;
+import com.sexyguys.suhang.domain.vo.*;
 import com.sexyguys.suhang.service.UserService;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +21,12 @@ public class AuthController {
     private static final String ACCOUNT_REGISTER = "account-register";
     private static final String ACCOUNT_MODIFY = "account-modify";
     private static final String ACCOUNT_DELETE = "account-delete";
+    private static final String ACCOUNT_SEARCH = "account-search";
 
 
     private final UserService userService;
 
+    @Autowired
     public AuthController(UserService userService) {
         this.userService = userService;
     }
@@ -92,6 +92,19 @@ public class AuthController {
     @PostMapping("/account/delete.do")
     public String postAccountDelete(DeleteAccountVO deleteAccountVO, Model model) {
         // TODO - 회원 삭제 로직 구현
+        return "redirect:/account/list";
+    }
+
+    @GetMapping("/account/search")
+    public String getAccountSearch(Model model) {
+        model.addAttribute("searchVO", new SearchVO());
+        return ACCOUNT_SEARCH;
+    }
+
+    @PostMapping("/account/search.do")
+    public String postAccountSearch(SearchVO searchVO, Model model) {
+        User user = userService.findOneMember(searchVO.getEmail());
+        System.out.println("찾으시는 유저 정보입니다!" + user.getEmail() + user.getSalt());
         return "redirect:/account/list";
     }
 
