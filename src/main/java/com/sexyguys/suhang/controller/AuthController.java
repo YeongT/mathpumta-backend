@@ -1,7 +1,9 @@
 package com.sexyguys.suhang.controller;
 
-import com.sexyguys.suhang.domain.User;
-import com.sexyguys.suhang.domain.vo.*;
+import com.sexyguys.suhang.domain.User
+import com.sexyguys.suhang.domain.vo.DeleteAccountVO;
+import com.sexyguys.suhang.domain.vo.ModifyAccountVO;
+import com.sexyguys.suhang.domain.vo.RegisterVO;
 import com.sexyguys.suhang.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Random;
 
 @Controller
 public class AuthController {
@@ -22,8 +23,6 @@ public class AuthController {
     private static final String ACCOUNT_MODIFY = "account-modify";
     private static final String ACCOUNT_DELETE = "account-delete";
     private static final String ACCOUNT_SEARCH = "account-search";
-
-
     private final UserService userService;
 
     @Autowired
@@ -31,54 +30,28 @@ public class AuthController {
         this.userService = userService;
     }
 
-    public static String generateString(int length) {
-        Random rand = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int index = rand.nextInt(3);
-            switch (index) {
-                case 0 -> sb.append((char) (rand.nextInt(26) + 97));
-                case 1 -> sb.append((char) (rand.nextInt(26) + 65));
-                case 2 -> sb.append(rand.nextInt(10));
-            }
-        }
-        return sb.toString();
+    //SHA512방식으로 Base64 해시 해주는 함수 입니다.
+    @SneakyThrows
+    public static String encryptPassword(String password, String salt) {
+        MessageDigest encoder = MessageDigest.getInstance("SHA-512");
+        encoder.update(salt.getBytes());
+        encoder.update(password.getBytes());
+        return Base64.getEncoder().encodeToString(encoder.digest());
     }
 
-
+    //Get으로 요청을 받으면 MVC로 폼을 띄운뒤
     @GetMapping("/account/register")
     public String getAccountNew(Model model) {
         model.addAttribute("registerVO", new RegisterVO());
         return ACCOUNT_REGISTER;
     }
-
+  
+    //Post로 리다이렉트하여서 UserService의 함수를 통해 실행한후 조회 페이지로 이동시킨다.
     @PostMapping("/account/register.do")
-    public String postAccountRegister(RegisterVO registerVO, Model model) {
+    public String postAccountRegister(RegisterVO registerVO) {
         User user = new User();
-        user.initialize(registerVO.getEmail(), null, registerVO.getSchool());
-        user.setSalt(generateString((int) (Math.random() % 3 + 10)));
-        user.setPassword(encryptPassword(registerVO.getPassword(), user.getSalt()));
+        user.initialize(registerVO.getEmail(), registerVO.getPassword(), registerVO.getSchool());
         userService.register(user);
-        return "redirect:/account/list";
-    }
-
-
-    @GetMapping("/account/list")
-    public String getAccountList(Model model) {
-        ArrayList<User> userArrayList = userService.loadUsers();
-        model.addAttribute("UserList", userArrayList);
-        return ACCOUNT_LIST;
-    }
-
-    @GetMapping("/account/modify")
-    public String getAccountModify(Model model) {
-        model.addAttribute("modifyAccountVO", new ModifyAccountVO());
-        return ACCOUNT_MODIFY;
-    }
-
-    @PostMapping("/account/modify.do")
-    public String postAccountModify(ModifyAccountVO modifyAccountVO, Model model) {
-        // TODO - 회원 수정 로직 구현
         return "redirect:/account/list";
     }
 
@@ -90,29 +63,21 @@ public class AuthController {
     }
 
     @PostMapping("/account/delete.do")
-    public String postAccountDelete(DeleteAccountVO deleteAccountVO, Model model) {
-        // TODO - 회원 삭제 로직 구현
+    public String postAccountDelete(DeleteAccountVO deleteAccountVO) {
+        User target = new User();
+        target.setEmail(deleteAccountVO.getEmail());
+        target.setPassword(deleteAccountVO.getPassword());
+        userService.deleteMember(target);
         return "redirect:/account/list";
     }
 
-    @GetMapping("/account/search")
-    public String getAccountSearch(Model model) {
-        model.addAttribute("searchVO", new SearchVO());
-        return ACCOUNT_SEARCH;
-    }
-
-    @PostMapping("/account/search.do")
-    public String postAccountSearch(SearchVO searchVO, Model model) {
-        User user = userService.findOneMember(searchVO.getEmail());
-        System.out.println("찾으시는 유저 정보입니다!" + user.getEmail() + user.getSalt());
+    //수정 페이지는 이전 객체, 새로운 객체로 두개를 넘겨서 이전의 객체를 덮어써 새로 저장하는 방식으로 구현하였다.
+    @PostMapping("/account/modify.do")
+    public String postAccountModify(ModifyAccountVO modifyAccountVO) {
+        User previous = new User(), target = new User();
+        previous.initialize(modifyAccountVO.getTarget_email(), modifyAccountVO.getTarget_password(), "");
+        target.initialize(modifyAccountVO.getNew_email(), modifyAccountVO.getNew_password(), modifyAccountVO.getNew_school());
+        userService.updateMember(previous, target);
         return "redirect:/account/list";
-    }
-
-    @SneakyThrows
-    public static String encryptPassword(String password, String salt) {
-        MessageDigest encoder = MessageDigest.getInstance("SHA-512");
-        encoder.update(salt.getBytes());
-        encoder.update(password.getBytes());
-        return Base64.getEncoder().encodeToString(encoder.digest());
     }
 }

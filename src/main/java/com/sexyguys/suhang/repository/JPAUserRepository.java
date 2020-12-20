@@ -1,6 +1,7 @@
 package com.sexyguys.suhang.repository;
 
 import com.sexyguys.suhang.domain.User;
+import org.springframework.data.jpa.repository.Modifying;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -12,8 +13,10 @@ public class JPAUserRepository implements UserRepository {
         this.entityManager = em;
     }
 
+    //유저 객체를 데이터베이스에 저장하는 함수.
     @Override
-    public void register(User user) {
+    @Modifying
+    public void save(User user) {
         entityManager.persist(user);
     }
 
@@ -31,5 +34,10 @@ public class JPAUserRepository implements UserRepository {
     @Override
     public ArrayList<User> findAll() {
         return (ArrayList<User>) entityManager.createQuery("select user from User user", User.class).getResultList();
+    }
+
+    @Override
+    public void delete(User user) {
+        entityManager.remove(user);
     }
 }
