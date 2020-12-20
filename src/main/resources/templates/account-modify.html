@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>학생 수정</title>
+</head>
+<body>
+<form method="post" th:action="@{/account/modify.do}" th:object="${modifyAccountVO}">
+    <input type="text" placeholder="수정할 학생의 이메일을 입력해주세요" th:field="*{target_email}">
+    <input type="password" placeholder="수정할 학생의 비밀번호를 입력해주세요" th:field="*{target_password}">
+
+
+    <input type="text" placeholder="새로운 이메일을 입력해주세요" th:field="*{new_email}">
+    <input type="password" placeholder="새로운 비밀번호를 입력해주세요" th:field="*{new_password}">
+    <input type="password" placeholder="새로운 학교를 입력해주세요" th:field="*{new_school}">
+    <button type="submit">수정하기</button>
+</form>
+</body>
+</html>
