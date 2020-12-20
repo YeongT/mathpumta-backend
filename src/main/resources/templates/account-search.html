@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학생 검색</title>
+</head>
+<body>
+
+<div>
+    <form method="post" th:action="@{/account/search.do}" th:object="${searchAccountVO}">
+        <label> 이메일
+            <input type="text" name="email" placeholder="찾으려는 학생의 이메일 입력해주세요" th:field="*{email}"/>
+        </label>
+        <button type="submit">검색하기</button>
+    </form>
+</div>
+</body>
+</html>

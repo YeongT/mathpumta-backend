@@ -4,8 +4,10 @@ import com.sexyguys.suhang.domain.User;
 import com.sexyguys.suhang.domain.vo.DeleteAccountVO;
 import com.sexyguys.suhang.domain.vo.ModifyAccountVO;
 import com.sexyguys.suhang.domain.vo.RegisterVO;
+import com.sexyguys.suhang.domain.vo.SearchVO;
 import com.sexyguys.suhang.service.UserService;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +23,10 @@ public class AuthController {
     private static final String ACCOUNT_REGISTER = "account-register";
     private static final String ACCOUNT_MODIFY = "account-modify";
     private static final String ACCOUNT_DELETE = "account-delete";
-
+    private static final String ACCOUNT_SEARCH = "account-search";
     private final UserService userService;
 
+    @Autowired
     public AuthController(UserService userService) {
         this.userService = userService;
     }
@@ -44,7 +47,6 @@ public class AuthController {
         return ACCOUNT_REGISTER;
     }
 
-
     @GetMapping("/account/list")
     public String getAccountList(Model model) {
         ArrayList<User> userArrayList = userService.loadUsers();
@@ -56,6 +58,19 @@ public class AuthController {
     public String getAccountModify(Model model) {
         model.addAttribute("modifyAccountVO", new ModifyAccountVO());
         return ACCOUNT_MODIFY;
+    }
+
+    @GetMapping("/account/search")
+    public String getAccountSearch(Model model) {
+        model.addAttribute("searchAccountVO", new SearchVO());
+        return ACCOUNT_SEARCH;
+    }
+
+    @PostMapping("account/search.do")
+    public String postAccountSearch(SearchVO searchVO, Model model) {
+        User user = userService.findOneMember(searchVO.getEmail());
+        model.addAttribute("UserList", user);
+        return ACCOUNT_LIST;
     }
 
     //Post로 리다이렉트하여서 UserService의 함수를 통해 실행한후 조회 페이지로 이동시킨다.
