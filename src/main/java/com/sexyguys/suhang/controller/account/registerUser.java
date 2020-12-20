@@ -1,15 +1,11 @@
 package com.sexyguys.suhang.controller.account;
 
-import com.sexyguys.suhang.controller.AuthController;
 import com.sexyguys.suhang.domain.User;
 import com.sexyguys.suhang.domain.models.APIResult;
 import com.sexyguys.suhang.service.UserService;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import static com.sexyguys.suhang.controller.AuthController.encryptPassword;
-import static com.sexyguys.suhang.controller.AuthController.generateString;
 
 @RestController
 public class registerUser {
@@ -42,8 +38,6 @@ public class registerUser {
             registerResult.bodyMsg = "ERROR : DUPLICATE EMAIL";
             return registerResult;
         }
-        params.setSalt(generateString((int) (Math.random() % 3 + 10)));
-        params.setPassword(encryptPassword(params.getPassword(),params.getSalt()));
 
         result = userService.register(params);
         if (result == null) {
