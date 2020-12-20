@@ -1,7 +1,6 @@
 package com.sexyguys.suhang.utility;
 
 import java.util.Random;
-import java.util.Random;
 
 
 // side-effect 가 발생하지 않는 pure utility method
@@ -9,7 +8,7 @@ public class StringUtility {
 
     public static String generateString(int length) {
         Random rand = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int index = rand.nextInt(3);
             switch (index) {

@@ -2,7 +2,6 @@ package com.sexyguys.suhang.controller;
 
 import com.sexyguys.suhang.domain.User;
 import com.sexyguys.suhang.domain.vo.DeleteAccountVO;
-import com.sexyguys.suhang.domain.vo.LoginVO;
 import com.sexyguys.suhang.domain.vo.ModifyAccountVO;
 import com.sexyguys.suhang.domain.vo.RegisterVO;
 import com.sexyguys.suhang.service.UserService;
@@ -15,7 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Random;
+
+import static com.sexyguys.suhang.utility.StringUtility.generateString;
 
 @Controller
 public class AuthController {
@@ -30,21 +30,6 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-
-    public static String generateString(int length) {
-        Random rand = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int index = rand.nextInt(3);
-            switch (index) {
-                case 0 -> sb.append((char) (rand.nextInt(26) + 97));
-                case 1 -> sb.append((char) (rand.nextInt(26) + 65));
-                case 2 -> sb.append(rand.nextInt(10));
-            }
-        }
-        return sb.toString();
-    }
-
 
     @GetMapping("/account/register")
     public String getAccountNew(Model model) {

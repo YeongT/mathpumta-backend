@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학생 추가</title>
+</head>
+<body>
+
+<div>
+    <form method="post" th:action="@{/account/register.do}" th:object="${registerVO}">
+        <label> 이메일
+            <input type="text" name="email" placeholder="이메일을 입력해주세요" th:field="*{email}"/>
+        </label>
+        <label>
+            비밀번호
+            <input type="password" name="password" placeholder="비밀번호를 입력해주세요" th:field="*{password}"/>
+        </label>
+        <label>
+            학교
+            <input type="text" name="school" placeholder="학교를 입력해주세요" th:field="*{school}"/>
+        </label>
+        <button type="submit">추가하기</button>
+    </form>
+</div>
+</body>
+</html>

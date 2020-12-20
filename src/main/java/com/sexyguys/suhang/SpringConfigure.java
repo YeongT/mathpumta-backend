@@ -1,7 +1,10 @@
 package com.sexyguys.suhang;
 
+import com.sexyguys.suhang.repository.ArticleRepository;
+import com.sexyguys.suhang.repository.JPAArticleRepository;
 import com.sexyguys.suhang.repository.JPAUserRepository;
 import com.sexyguys.suhang.repository.UserRepository;
+import com.sexyguys.suhang.service.ArticleService;
 import com.sexyguys.suhang.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +24,17 @@ public class SpringConfigure {
     @Bean
     public UserService userService() {
         return new UserService(userRepository());
+    }
+
+
+    @Bean
+    public ArticleService articleService() {
+        return new ArticleService(articleRepository());
+    }
+
+    @Bean
+    public ArticleRepository articleRepository() {
+        return new JPAArticleRepository(entityManager);
     }
 
     @Bean
