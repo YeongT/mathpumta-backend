@@ -5,7 +5,7 @@ import com.sexyguys.suhang.domain.Article;
 import java.util.ArrayList;
 
 public interface ArticleRepository {
-    void post(Article article);
+    void save(Article article);
 
     Article findById(int id);
 

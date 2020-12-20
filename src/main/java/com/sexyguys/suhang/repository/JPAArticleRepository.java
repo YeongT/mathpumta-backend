@@ -1,6 +1,7 @@
 package com.sexyguys.suhang.repository;
 
 import com.sexyguys.suhang.domain.Article;
+import org.springframework.data.jpa.repository.Modifying;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ public class JPAArticleRepository implements ArticleRepository {
     }
 
     @Override
-    public void post(Article article) {
+    @Modifying
+    public void save(Article article) {
         entityManager.persist(article);
     }
 
