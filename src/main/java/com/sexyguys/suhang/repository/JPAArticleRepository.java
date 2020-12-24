@@ -32,9 +32,18 @@ public class JPAArticleRepository implements ArticleRepository {
 
     @Override
     public ArrayList<Article> search(String category, String keyword) {
-        TypedQuery<Article> query = entityManager.createQuery("select article from Article article where article.category = :category and article.title like CONCAT('%', :keyword,'%')", Article.class);
-        query.setParameter("keyword", keyword);
-        query.setParameter("category", category);
+        TypedQuery<Article> query;
+        if (category.equals("*") && keyword.equals("*"))
+            query = entityManager.createQuery("select article from Article article", Article.class);
+        else if (category.equals("*"))
+            query = entityManager.createQuery("select article from Article article where article.title like CONCAT('%', :keyword, '%')", Article.class);
+        else if (keyword.equals("*"))
+            query = entityManager.createQuery("select article from Article article where article.category = :category", Article.class);
+        else
+            query = entityManager.createQuery("select article from Article article where article.category = :category and article.title like CONCAT('%', :keyword,'%')", Article.class);
+
+        if (!keyword.equals("*")) query.setParameter("keyword", keyword);
+        if (!category.equals("*")) query.setParameter("category", category);
         return (ArrayList<Article>) query.getResultList();
     }
 

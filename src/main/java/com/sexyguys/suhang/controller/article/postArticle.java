@@ -21,14 +21,16 @@ public class postArticle {
     @ResponseBody
     public APIResult getPost(@ModelAttribute Article params) {
         APIResult postResult = new APIResult();
-        if (params.getCategory() == null || params.getDetailed() == null || params.getTitle() == null || params.getContent() == null || params.getDifficulty() == null || params.getEmail() == null) {
+        if (params.getCategory().isBlank() || params.getDetailed().isBlank() || params.getTitle().isBlank() || params.getContent().isBlank() || params.getDifficulty().isBlank()) {
             postResult.statusCode = 412;
             postResult.bodyMsg = "ERROR : INVALID POST DATA";
             return postResult;
         }
         Article target = new Article();
-        target.initialize(params.getEmail(), params.getDetailed(), params.getCategory(), params.getTitle(), params.getContent(), params.getImage(), params.getDifficulty());
+        target.initialize(params.getEmail(), params.getCategory(), params.getDetailed(),params.getTitle(), params.getContent(), params.getImage(), params.getDifficulty());
+        if (target.getCategory().equals("*")) target.setCategory("전체");
         target.setWatch(0);
+        target.setEmail("notImplemented@email.com");
         articleService.postArticle(target);
 
         postResult.statusCode = 200;

@@ -8,12 +8,14 @@ import com.sexyguys.suhang.service.ArticleService;
 import com.sexyguys.suhang.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.EntityManager;
 
 //DI Injection 구현을 위해 Bean과 Autowired를 조합해 필요할때 의존성이 주입되도록 함.
 @Configuration
-public class SpringConfigure {
+public class SpringConfigure implements WebMvcConfigurer {
 
     private final EntityManager entityManager;
 
@@ -40,5 +42,11 @@ public class SpringConfigure {
     @Bean
     public UserRepository userRepository() {
         return new JPAUserRepository(entityManager);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*");
     }
 }
