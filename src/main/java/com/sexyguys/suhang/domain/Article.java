@@ -10,13 +10,15 @@ public class Article {
     @Column(name = "num")
     int id;
     String email;
+    String category;
     String title;
     String content;
     String image;
     String difficulty;
 
-    public void initialize(String email, String title, String content, String image, String difficulty) {
+    public void initialize(String email, String category, String title, String content, String image, String difficulty) {
         this.email = email;
+        this.category = category;
         this.title = title;
         this.content = content;
         this.image = image;
@@ -25,6 +27,14 @@ public class Article {
 
     public int getId() {
         return id;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void setId(int id) {

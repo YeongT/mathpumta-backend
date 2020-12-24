@@ -45,7 +45,7 @@ public class ArticleService {
         return articleRepository.findByEmail(email);
     }
 
-    public ArrayList<Article> searchArticles(String keyword) {
-        return articleRepository.search(keyword);
+    public ArrayList<Article> searchArticles(String category, String keyword) {
+        return articleRepository.search(category, keyword);
     }
 }

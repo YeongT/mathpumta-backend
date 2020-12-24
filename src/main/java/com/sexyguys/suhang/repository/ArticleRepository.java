@@ -11,7 +11,7 @@ public interface ArticleRepository {
 
     ArrayList<Article> findByEmail(String email);
 
-    ArrayList<Article> search(String keyword);
+    ArrayList<Article> search(String category, String keyword);
 
     void delete(Article article);
 }

@@ -4,6 +4,7 @@ import com.sexyguys.suhang.domain.Article;
 import org.springframework.data.jpa.repository.Modifying;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 
 public class JPAArticleRepository implements ArticleRepository {
@@ -30,8 +31,11 @@ public class JPAArticleRepository implements ArticleRepository {
     }
 
     @Override
-    public ArrayList<Article> search(String keyword) {
-        return (ArrayList<Article>) entityManager.createQuery("select article from Article article where article.title like CONCAT(:keyword,'%')", Article.class).getResultList();
+    public ArrayList<Article> search(String category, String keyword) {
+        TypedQuery<Article> query = entityManager.createQuery("select article from Article article where article.category = :category and article.title like CONCAT('%', :keyword,'%')", Article.class);
+        query.setParameter("keyword", keyword);
+        query.setParameter("category", category);
+        return (ArrayList<Article>) query.getResultList();
     }
 
     @Override
