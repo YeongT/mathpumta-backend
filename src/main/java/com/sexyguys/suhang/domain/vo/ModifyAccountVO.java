@@ -9,6 +9,7 @@ public class ModifyAccountVO {
     private String target_email;
     private String target_password;
     private String new_email;
+    private String new_name;
     private String new_password;
     private String new_school;
 }

@@ -77,7 +77,7 @@ public class AuthController {
     @PostMapping("/account/register.do")
     public String postAccountRegister(RegisterVO registerVO) {
         User user = new User();
-        user.initialize(registerVO.getEmail(), registerVO.getPassword(), registerVO.getSchool());
+        user.initialize(registerVO.getEmail(), registerVO.getName(), registerVO.getPassword(), registerVO.getSchool());
         userService.register(user);
         return "redirect:/account/list";
     }
@@ -102,8 +102,8 @@ public class AuthController {
     @PostMapping("/account/modify.do")
     public String postAccountModify(ModifyAccountVO modifyAccountVO) {
         User previous = new User(), target = new User();
-        previous.initialize(modifyAccountVO.getTarget_email(), modifyAccountVO.getTarget_password(), "");
-        target.initialize(modifyAccountVO.getNew_email(), modifyAccountVO.getNew_password(), modifyAccountVO.getNew_school());
+        previous.initialize(modifyAccountVO.getTarget_email(), "", modifyAccountVO.getTarget_password(), "");
+        target.initialize(modifyAccountVO.getNew_email(), modifyAccountVO.getNew_name(),modifyAccountVO.getNew_password(), modifyAccountVO.getNew_school());
         userService.updateMember(previous, target);
         return "redirect:/account/list";
     }

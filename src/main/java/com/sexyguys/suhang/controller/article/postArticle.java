@@ -30,7 +30,6 @@ public class postArticle {
         target.initialize(params.getEmail(), params.getCategory(), params.getDetailed(),params.getTitle(), params.getContent(), params.getImage(), params.getDifficulty());
         if (target.getCategory().equals("*")) target.setCategory("전체");
         target.setWatch(0);
-        target.setEmail("notImplemented@email.com");
         articleService.postArticle(target);
 
         postResult.statusCode = 200;

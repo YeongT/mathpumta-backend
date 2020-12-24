@@ -27,7 +27,7 @@ public class registerUser {
             return registerResult;
         }
 
-        if (params.getEmail().isEmpty() || params.getPassword().isEmpty() || params.getSchool().isEmpty()) {
+        if (params.getEmail().isBlank() || params.getName().isBlank() || params.getPassword().isBlank() || params.getSchool().isBlank()) {
             registerResult.statusCode = 412;
             registerResult.bodyMsg = "ERROR : INVALID POST DATA";
             return registerResult;

@@ -39,6 +39,7 @@ public class UserService {
         if (target != null) {
             if (!target.getPassword().equals(encryptPassword(user.getPassword(), target.getSalt()))) return;
             target.setEmail(update.getEmail());
+            target.setName(update.getName());
             target.setPassword(encryptPassword(update.getPassword(), target.getSalt()));
             target.setSchool(update.getSchool());
             userRepository.save(target);

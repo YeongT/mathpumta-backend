@@ -4,19 +4,21 @@ import javax.persistence.*;
 
 //Spring JPA에 사용하는 Entity이자, 모든 데이터ㅇ 통신의 변수로 사용되는 클래스 입니다.
 @Entity
-@Table(name = "users")
+@Table(name = "users_new")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "num")
     int id;
     String email;
     String password;
+    String name;
     String school;
     String salt;
 
-    public void initialize(String email, String password, String school) {
+    public void initialize(String email, String name, String password, String school) {
         this.email = email;
+        this.name = name;
         this.password = password;
         this.school = school;
     }
@@ -27,6 +29,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {

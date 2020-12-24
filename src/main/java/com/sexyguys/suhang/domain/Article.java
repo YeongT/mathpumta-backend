@@ -3,7 +3,7 @@ package com.sexyguys.suhang.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "articles")
+@Table(name = "articles_new")
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
