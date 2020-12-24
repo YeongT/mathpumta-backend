@@ -6,8 +6,9 @@ import com.sexyguys.suhang.service.ArticleService;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-
+@RestController
 public class viewArticle {
     private final ArticleService articleService;
 
