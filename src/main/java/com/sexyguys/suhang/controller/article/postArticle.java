@@ -28,6 +28,7 @@ public class postArticle {
         }
         Article target = new Article();
         target.initialize(params.getEmail(), params.getDetailed(), params.getCategory(), params.getTitle(), params.getContent(), params.getImage(), params.getDifficulty());
+        target.setWatch(0);
         articleService.postArticle(target);
 
         postResult.statusCode = 200;

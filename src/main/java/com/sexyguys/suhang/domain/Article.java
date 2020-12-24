@@ -16,6 +16,7 @@ public class Article {
     String content;
     String image;
     String difficulty;
+    int watch;
 
     public void initialize(String email, String category, String detailed, String title, String content, String image, String difficulty) {
         this.email = email;
@@ -89,5 +90,13 @@ public class Article {
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public int getWatch() {
+        return watch;
+    }
+
+    public void setWatch(int watch) {
+        this.watch = watch;
     }
 }
