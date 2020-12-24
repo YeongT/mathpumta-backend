@@ -11,14 +11,16 @@ public class Article {
     int id;
     String email;
     String category;
+    String detailed;
     String title;
     String content;
     String image;
     String difficulty;
 
-    public void initialize(String email, String category, String title, String content, String image, String difficulty) {
+    public void initialize(String email, String category, String detailed, String title, String content, String image, String difficulty) {
         this.email = email;
         this.category = category;
+        this.detailed = detailed;
         this.title = title;
         this.content = content;
         this.image = image;
@@ -27,6 +29,14 @@ public class Article {
 
     public int getId() {
         return id;
+    }
+
+    public String getDetailed() {
+        return detailed;
+    }
+
+    public void setDetailed(String detailed) {
+        this.detailed = detailed;
     }
 
     public String getCategory() {

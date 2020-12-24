@@ -21,13 +21,13 @@ public class postArticle {
     @ResponseBody
     public APIResult getPost(@ModelAttribute Article params) {
         APIResult postResult = new APIResult();
-        if (params.getCategory() == null || params.getTitle() == null || params.getContent() == null || params.getDifficulty() == null || params.getEmail() == null) {
+        if (params.getCategory() == null || params.getDetailed() == null || params.getTitle() == null || params.getContent() == null || params.getDifficulty() == null || params.getEmail() == null) {
             postResult.statusCode = 412;
             postResult.bodyMsg = "ERROR : INVALID POST DATA";
             return postResult;
         }
         Article target = new Article();
-        target.initialize(params.getEmail(), params.getCategory(), params.getTitle(), params.getContent(), params.getImage(), params.getDifficulty());
+        target.initialize(params.getEmail(), params.getDetailed(), params.getCategory(), params.getTitle(), params.getContent(), params.getImage(), params.getDifficulty());
         articleService.postArticle(target);
 
         postResult.statusCode = 200;
