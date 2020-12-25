@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "articles_new")
-public class Article {
+public class Article implements Cloneable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "num")
@@ -98,5 +98,10 @@ public class Article {
 
     public void setWatch(int watch) {
         this.watch = watch;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

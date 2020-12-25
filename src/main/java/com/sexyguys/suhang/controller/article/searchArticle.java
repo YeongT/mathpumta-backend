@@ -25,7 +25,7 @@ public class searchArticle {
 
     @PostMapping(value = "/api/article/search")
     @ResponseBody
-    public APIResult getPost(@ModelAttribute ArticleVO params) {
+    public APIResult getPost(@ModelAttribute ArticleVO params) throws CloneNotSupportedException {
         APIResult searchResult = new APIResult();
         if ((params.getPostId() == null) && (params.getCategory() == null || params.getKeyword() == null)) {
             searchResult.statusCode = 412;
@@ -33,15 +33,22 @@ public class searchArticle {
             return searchResult;
         }
         if (params.getPostId() == null) {
-            ArrayList<Article> result = articleService.searchArticles(params.getCategory(), params.getKeyword());
-            if (result.isEmpty()) {
+            ArrayList<Article> data = articleService.searchArticles(params.getCategory(), params.getKeyword());
+            if (data.isEmpty()) {
                 searchResult.statusCode = 409;
                 searchResult.bodyMsg = "ERROR : ARTICLE NOT EXIST";
                 return searchResult;
             }
-            for(Article article: result) {
-                User owner = userService.findOneMember(article.getEmail());
-                if (owner != null) article.setEmail(String.format("%s[%s]",owner.getName(), owner.getSchool()));
+
+            ArrayList<Article> result = new ArrayList<>();
+            for (Article article: data) {
+                Article parameter = (Article)article.clone();
+                parameter.setCategory(changeCategoryToKorean(parameter.getCategory()));
+                parameter.setDifficulty(changeDifficultyToKorean(parameter.getDifficulty()));
+
+                User owner = userService.findOneMember(parameter.getEmail());
+                if (owner != null) parameter.setEmail(String.format("%s[%s]",owner.getName(), owner.getSchool()));
+                result.add(parameter);
             }
             searchResult.statusCode = 200;
             searchResult.bodyMsg = "SUCCESS : ARTICLE SEARCHED";
@@ -63,5 +70,29 @@ public class searchArticle {
         searchResult.bodyMsg = "SUCCESS : ARTICLE SEARCHED";
         searchResult.output = result;
         return searchResult;
+    }
+
+    private String changeDifficultyToKorean(String difficulty) {
+        return switch (difficulty) {
+            case "VHIGH" -> "매우 어려움";
+            case "LHIGH" -> "어려움";
+            case "MIDDLE" -> "보통";
+            case "LLOW" -> "쉬움";
+            case "VLOW" -> "매우 쉬움";
+            default -> difficulty;
+        };
+    }
+
+    private String changeCategoryToKorean(String category) {
+        return switch (category) {
+            case "math1" -> "수I";
+            case "math2" -> "수II";
+            case "math3" -> "미적분";
+            case "math4" -> "수학(상)";
+            case "math5" -> "수학(하)";
+            case "math6" -> "중등수학";
+            case "math7" -> "초등수학";
+            default -> category;
+        };
     }
 }
